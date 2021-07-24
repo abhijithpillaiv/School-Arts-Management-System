@@ -40,8 +40,11 @@ cat1 : [
   {label: 'Elocution Eng', value: 'Elocution Eng' },
   {label: 'Elocution Mal', value: 'Elocution Mal' },
   {label: 'Folkdance (common)', value: 'Folkdance (common)' },
+  {label: 'News Reading Eng', value: 'News Reading Eng' },
+  {label: 'news Reading Mal', value: 'news Reading Mal' },
+  {label: 'News Reading Hindi', value: 'News Reading Hindi' },
   ],
-
+  
 
 
   cat2 : [
@@ -70,8 +73,12 @@ cat1 : [
    {label: 'Bharathamatyam Girls', value: 'Bharathamatyam Girls' },
    {label: 'Mohiniyattom', value: 'Mohiniyattom' },
    {label: 'Monoact (Common)', value: 'Monoact (Common)' },
+   {label: 'News Reading Eng', value: 'News Reading Eng' },
+  {label: 'news Reading Mal', value: 'news Reading Mal' },
+  {label: 'News Reading Hindi', value: 'News Reading Hindi' },
+  {label: ' classical music', value: ' classical music' },
   ],
-
+ 
 
 
   cat3 : [
