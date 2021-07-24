@@ -13,13 +13,13 @@ function teacherClas() {
             setclas(['lkg','ukg'])
         }
         if (cat === 'cat0') {
-            setclas(['I','II','III'])
+            setclas(['I','II'])
         }
         if (cat === 'cat1') {
-            setclas(['IV','V'])
+            setclas(['III','IV'])
         }
         if (cat === 'cat2') {
-            setclas(['VI','VII'])
+            setclas(['V','VI','VII'])
         }
         if (cat === 'cat3') {
             setclas(['VIII','IX','X'])
