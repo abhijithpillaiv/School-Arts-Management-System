@@ -189,7 +189,7 @@ function cat() {
                                                             <td>{obj2.dob}</td>
                                                             <td>{ obj2.phoneNum}</td>
                                                             <td>{obj2.admnId}</td>
-                                                            <td className="text-center"> {obj2.image!==undefined ? <img width="70px" height="70px" src={"http://localhost:9000/image/"+obj2.image}  alt=''/> :<img width="70px" height="70px" src={a}  alt=''/>}</td>
+                                                            <td className="text-center"> {obj2.image!=="undefined" ? <img width="70px" height="70px" src={"http://localhost:9000/image/"+obj2.image}  alt=''/> :<img width="70px" height="70px" src={a}  alt=''/>}</td>
                                                             <td>
                                                                 <div className="dropdown">
                                                                     <Dropdown>
