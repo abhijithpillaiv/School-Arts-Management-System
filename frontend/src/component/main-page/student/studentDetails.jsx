@@ -37,7 +37,7 @@ function studentDetails() {
                     </div>
                     <div className="single-info-details">
                         <div className="item-img">
-                        {Details.image!==undefined ? <img width="300px" height="300px" src={"http://localhost:9000/image/"+Details.image}  alt=''/> :<img width="300px" height="300px" src={a}  alt=''/>}
+                        {Details.image!=="undefined" ? <img width="300px" height="300px" src={"http://localhost:9000/image/"+Details.image}  alt=''/> :<img width="300px" height="300px" src={a}  alt=''/>}
                         </div>
                         <div className="item-content">
                             <div className="header-inline item-header">
