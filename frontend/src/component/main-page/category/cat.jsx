@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import Dropdown from 'react-bootstrap/Dropdown';
-import {Link, useHistory} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {useParams} from 'react-router-dom'
 import axios from 'axios'
 import itemList from '../student/itemList'
 import a from '../student/a.png'
 import serch from '../../public/images/serch.png'
+import lodr from '../student/ATB3o.gif'
+import Alert from '../../alert'
 
 function cat() {
     
@@ -16,8 +18,9 @@ function cat() {
     let serchList = null;
     const [serchName, setserchName] = useState('')
     const [serchItem, setserchItem] = useState('')
-    const history = useHistory()
     const [confirm, setconfirm] = useState({isOpen: false})
+    const [progress, setprogress] = useState(false)
+    const [reloader, setreloader] = useState(true)
 
     const onDelete = id => {
         setconfirm({
@@ -25,9 +28,9 @@ function cat() {
             isOpen: false
         });
 
-        history.push('/allStudents', [true])
+        setprogress(true)
         axios.get('/api/student/studentDelete/' + id).then((res) => {
-            history.push('/allStudents')
+            setreloader(!reloader)
         })
 
     }
@@ -53,15 +56,21 @@ function cat() {
 
         axios.get('/api/student/getStudents/' + cat).then((res) => {
             setdata(res.data)
+            setprogress(false)
         })
-    }, [cat])
+    }, [cat,reloader])
 
     const printHandler=()=>{
         window.print();
     }
+    const selectHandler =(id,select)=>{
+        setprogress(true)
+        axios.get('/api/student/selectStudent/'+id+'/'+select).then((res)=>{
+            setreloader(!reloader)
+        }) 
+    }
 
-
-    return (
+    return progress ? <img src={lodr} alt="Loading..."></img>: (
         <div>
             <div className="breadcrumbs-area">
                 <h3>cat
@@ -144,11 +153,12 @@ function cat() {
                                         <table className="table display data-table text-nowrap">
                                             <thead>
                                                 <tr>
-                                                    <th>
-                                                        <div className="form-check">
-                                                            <input type="checkbox" className="form-check-input checkAll"/>
-                                                            <label className="form-check-label">Name</label>
-                                                        </div>
+                                                <th></th>
+                                                 <th>
+                                                        <div className="form-chec">
+                                                      {/* <input type="checkbox" className="form-check-input checkAll"/> */}
+                                                         <label className="form-check-label">Name</label>
+                                                     </div>
                                                     </th>
                                                     <th>Roll Num</th>
                                                     <th>Gender</th>
@@ -174,13 +184,14 @@ function cat() {
                                                 }).map((obj2) => {
                                                     return obj2.items.includes(obj) ? (
                                                         <tr key={obj2._id}>
-                                                            <td>
-                                                                 <div className="form-check">
-                                                                    <input type="checkbox" className="form-check-input"/>
-                                                                    <label className="form-check-label">
-                                                                        {obj2.name}</label>
-                                                                </div>
-                                                            </td>
+                                                             <td> {obj2.select !=='undefined' ? obj2.select === 'true' ?<i className="fas fa-check-circle"></i>:null:null}</td>
+                                                                 <td>
+                                              <div className="form-chec">
+                                                  {/* <input type="checkbox" className="form-check-input"/> */}
+                                                  
+                                                  <label className="form-check-label">{obj2.name}</label>
+                                              </div>
+                                          </td>
                                                             <td>{obj2.roll}</td>
                                                             <td>{obj2.gender}</td>
                                                             <td>{obj2.category}</td>
@@ -237,10 +248,15 @@ function cat() {
                                                                                     </Link>
                                                                                 </span>
                                                                             </button>
-
+                                                                            {obj2.select !=='undefined' ?obj2.select === 'true'?
+                                                          <button onClick={()=>selectHandler(obj2._id,false)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> DeSelect</i></button>:
+                                                          <button onClick={()=>selectHandler(obj2._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>:
+                                                          <button onClick={()=>selectHandler(obj2._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>}
+                                                          
                                                                         </Dropdown.Menu>
 
                                                                     </Dropdown>
+                                                                    
                                                                 </div>
                                                             </td>
 
@@ -257,6 +273,7 @@ function cat() {
                     )
                 }) : <div>Loading...</div>
             } </div>
+            <Alert confirm={confirm} setconfirm={setconfirm}/>
         </div>
     )
 

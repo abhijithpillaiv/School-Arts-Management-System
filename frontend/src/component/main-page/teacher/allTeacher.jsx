@@ -7,15 +7,18 @@ import lodr from '../student/ATB3o.gif'
 import serch from './serch.png'
 
 function allTeacher(props) {
+    let serchList = null;
     const [teacher, setteacher] = useState(null)
     const [confirm, setconfirm] = useState({isOpen:false})
-    const [dlt, setdlt] = useState(false)
+    const [serchName, setserchName] = useState('')
+    const [progress, setprogress] = useState(false)
+    const [reloader, setreloader] = useState(false)
 
     const onDelete=id=>{
         setconfirm({...confirm, isOpen:false});
-        setdlt(true)
+        setprogress(true)
             axios.get('/api/teacher/teacherDelete/'+id).then((res)=>{
-                setdlt(false)
+                setreloader(!reloader)
             }) 
         
     }
@@ -24,8 +27,12 @@ function allTeacher(props) {
         axios.get('/api/teacher/allTeacher').then((res) => {
             setteacher(res.data);
         })
-    }, [dlt])
-    return dlt ? <img src={lodr} alt="loader"></img> :(
+        axios.get('/api/teacher/getTeacherCount').then((res) => {
+            props.setteacherCount(res.data);
+        })
+        setprogress(false)
+    }, [reloader])
+    return progress ? <img src={lodr} alt="loader"></img> :(
         <div>
             {teacher ? <div>
                 <div className="breadcrumbs-area">
@@ -56,22 +63,16 @@ function allTeacher(props) {
                             </div>
                         </div>
                     </div>}
-                    {props.teacher ? null : <div><div  className="mg-b-20">
+                    <div  className="mg-b-20">
                       <div className="row gutters-8">
-                          <div className="col-3-xxxl col-xl-3 col-lg-3 col-3 form-group">
-                              <input type="text" placeholder="Roll ..." className="form-control"/>
+                      <div className="col-10-xxxl col-xl-10 col-lg-10 col-10 form-group">
+                              <input onChange={(e)=>{setserchName(e.target.value)}} type="text" placeholder="Name ..." className="form-control"/>
                           </div>
-                          <div className="col-4-xxxl col-xl-4 col-lg-3 col-3 form-group">
-                              <input type="text" placeholder="Name ..." className="form-control"/>
-                          </div>
-                          <div className="col-4-xxxl col-xl-3 col-lg-3 col-3 form-group">
-                              <input type="text" placeholder="Item ..." className="form-control"/>
-                          </div>
-                          <div className="col-1-xxxl col-xl-2 col-lg-3 col-3 form-group">
+                          <div className="col-2-xxxl col-xl-2 col-lg-2 col-2 form-group">
                               <button  className="fw-btn-fill btn-gradient-yellow"><img src={serch}  width='30px' height='30px' alt="img"></img></button>
                           </div>
                       </div>
-                  </div></div>} 
+                  </div>
                    
                     <div className="table-responsive">
                         <table className="table display data-table text-nowrap">
@@ -89,7 +90,16 @@ function allTeacher(props) {
                             <tbody>
 
                                 {
-                                 teacher.map((obj)=>{
+                                 teacher.filter((obj)=>{
+                                    if(serchName === ''){
+                                        serchList = obj
+                                    }
+                                    else if(obj.name.toString().toLowerCase().includes(serchName.toString().toLowerCase())){
+                                        serchList = obj
+                                    }
+                                    else{}
+                                    return serchList
+                                }).map((obj)=>{
                                      return(
                                         <tr key={obj._id}>
                                         <td></td>

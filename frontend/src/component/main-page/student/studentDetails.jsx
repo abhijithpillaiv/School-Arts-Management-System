@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {Link,useParams} from 'react-router-dom'
 import axios from 'axios'
 import a from './a.png'
+import slt from './slt.jpg'
 
 function studentDetails() {
     const{id}=useParams()
@@ -37,15 +38,16 @@ function studentDetails() {
                     </div>
                     <div className="single-info-details">
                         <div className="item-img">
-                        {Details.image!=="undefined" ? <img width="300px" height="300px" src={"http://localhost:9000/image/"+Details.image}  alt=''/> :<img width="300px" height="300px" src={a}  alt=''/>}
+                        {Details.image !== 'undefined' ? <img width="300px" height="300px" src={"http://localhost:9000/image/"+Details.image}  alt=''/> :<img width="300px" height="300px" src={a}  alt=''/>}
                         </div>
                         <div className="item-content">
                             <div className="header-inline item-header">
                                 <h3 className="text-dark-medium font-medium">{Details.name}</h3>
+                                {Details.select !=='undefined' ? Details.select === 'true' ?<img width='120px' height='60px' src={slt} alt=''style={{position: 'absolute' ,right: '100px'}}></img>:null:null}
                                 <div className="header-elements">
                                     <ul>
-                                        <li><Link to={{pathname:'/studentEdit/'+id}}><i className="far fa-edit"></i></Link></li>
-                                        <li><Link to=''><i className="fas fa-print"></i></Link></li>
+                                        <li><button to={{pathname:'/studentEdit/'+id}}><i className="far fa-edit"></i></button></li>
+                                        <li><button to=''><i className="fas fa-print"></i></button></li>
                                         <li><button onClick={printHandler}><i className="fas fa-download"></i></button></li>
                                     </ul>
                                 </div>
@@ -76,7 +78,12 @@ function studentDetails() {
                                         </tr>
                                         <tr>
                                             <td>Items:</td>
-                                            <td className="font-medium text-dark-medium">{Details.items}</td>
+                                            {Details.items?Details.items.map((obj)=>{
+                                                return(
+                                                  <div key={obj} className="font-medium text-dark-medium">{obj}</div>
+                                                )
+                                            }):null}
+                                            
                                         </tr>
                                         <tr>
                                             <td>className:</td>

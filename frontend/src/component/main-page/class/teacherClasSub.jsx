@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from 'react'
 import Dropdown from 'react-bootstrap/Dropdown';
-import {Link, useHistory} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import Alert from '../../alert'
 import axios from 'axios'
 import a from '../student/a.png'
 import serch from '../../public/images/serch.png'
-
+import lodr from './ATB3o.gif'
 
 function teacherClasSub(props) {
     const [data, setdata] = useState(null)
     let serchList = null;
     const [serchName, setserchName] = useState('')
-    const history = useHistory()
     const [confirm, setconfirm] = useState({isOpen: false})
+    const [reloader, setreloader] = useState(true)
+    const [progress, setprogress] = useState(false)
 
     const onDelete = id => {
         setconfirm({
@@ -20,20 +21,27 @@ function teacherClasSub(props) {
             isOpen: false
         });
 
-        history.push('/allStudents', [true])
+        setprogress(true)
         axios.get('/api/student/studentDelete/' + id).then((res) => {
-            // history.push('/allStudents')
-            history.goBack()
+            setreloader(!reloader)
         })
 
     }
     useEffect(() => {
         axios.get('/api/student/getStudents/class/' + props.clas).then((res) => {
             setdata(res.data)
+            setprogress(false)
         })
-    }, [props.clas])
+    }, [props.clas,reloader])
 
-    return (data ? (<div>
+    const selectHandler =(id,select)=>{
+        setprogress(true)
+        axios.get('/api/student/selectStudent/'+id+'/'+select).then((res)=>{
+            setreloader(!reloader)
+        }) 
+    }
+
+    return progress ? <img src={lodr} alt="Loading..."></img> : (data ? (<div>
         <div className="card height-auto">
               <div className="card-body">
                   <div className="heading-layout1">
@@ -56,9 +64,9 @@ function teacherClasSub(props) {
                       <table className="table display data-table text-nowrap">
                           <thead>
                               <tr>
+                                  <th></th>
                                   <th>
-                                      <div className="form-check">
-                                          <input type="checkbox" className="form-check-input checkAll"/>
+                                      <div className="form-chec">
                                           <label className="form-check-label">Name</label>
                                       </div>
                                   </th>
@@ -86,8 +94,8 @@ function teacherClasSub(props) {
                                   return (
                                       <tr key={obj._id}>
                                           <td>
-                                              <div className="form-check">
-                                                  <input type="checkbox" className="form-check-input"/>
+                                          <td> {obj.select !=='undefined' ? obj.select === 'true' ?<i className="fas fa-check-circle"></i>:null:null}</td>
+                                              <div className="form-chec">
                                                   <label className="form-check-label">{obj.name}</label>
                                               </div>
                                           </td>
@@ -126,6 +134,11 @@ function teacherClasSub(props) {
                                                          <button className="dropdown-item"> <span><Link to={{pathname:'/studentDetails/'+obj._id}}  >
                                                           <i className="fas fa-redo-alt text-orange-peel">View Profile</i></Link></span></button>
                                                   
+                                                          {obj.select !=='undefined' ?obj.select === 'true'?
+                                                          <button onClick={()=>selectHandler(obj._id,false)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> DeSelect</i></button>:
+                                                          <button onClick={()=>selectHandler(obj._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>:
+                                                          <button onClick={()=>selectHandler(obj._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>}
+                                                          
                                                   </Dropdown.Menu>
                                                   
                                         </Dropdown>

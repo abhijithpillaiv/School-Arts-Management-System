@@ -8,6 +8,7 @@ import StudentDetails from "./component/main-page/student/studentDetails";
 import studentEdit from "./component/main-page/student/studentEdit";
 import Cat from './component/main-page/category/cat'
 import Class from './component/main-page/class/teacherClas'
+import SelectedStudents from './component/main-page/student/selectedStudents'
 import { Route} from "react-router-dom";
 function teacher() {
     return (
@@ -20,6 +21,9 @@ function teacher() {
             </Route>
             <Route exact component={AddStudent} path="/addStudent/:cat" />
             <Route exact component={AllStudents} path="/allStudents" />
+            <Route exact  path="/selectedStudents/:cat" >
+            <SelectedStudents ></SelectedStudents>
+          </Route>
             <Route path="/studentDetails/:id">
             <StudentDetails />
           </Route>

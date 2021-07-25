@@ -5,6 +5,7 @@ import MainPage from "./component/main-page/mainPage";
 import Fotter from "./component/fotter/fotter";
 import AddStudent from "./component/main-page/student/addStudent";
 import AllStudents from "./component/main-page/student/allStudent";
+import SelectedStudents from './component/main-page/student/selectedStudents'
 import StudentDetails from "./component/main-page/student/studentDetails";
 import AddTeacher from "./component/main-page/teacher/addTeacher";
 import AllTeachers from "./component/main-page/teacher/allTeacher";
@@ -33,6 +34,7 @@ function admin() {
           <Route exact component={MainPage} path="/" />
           <Route exact component={AddStudent} path="/addStudent/:cat" />
           <Route exact component={AllStudents} path="/allStudents" />
+          <Route exact component={SelectedStudents} path="/selectedStudents/:cat" />
           <Route path="/studentDetails/:id">
             <StudentDetails />
           </Route>

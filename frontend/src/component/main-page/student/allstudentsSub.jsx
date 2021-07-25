@@ -1,36 +1,41 @@
 import React, { useState} from 'react'
 import axios from 'axios';
 import Dropdown from 'react-bootstrap/Dropdown';
-import {Link, useHistory } from 'react-router-dom';
+import {Link } from 'react-router-dom';
 import Alert from '../../alert'
 import a from './a.png'
 import serch from '../../public/images/serch.png'
+import lodr from './ATB3o.gif'
 
 
 function allstudentsSub(props) {
     let serchList = null;
     const [serchName, setserchName] = useState('')
-    const history=useHistory()
     const [confirm, setconfirm] = useState({isOpen:false})
     
     const onDelete=id=>{
         setconfirm({...confirm, isOpen:false});
-            
-        history.push('/allStudents',[true])
+        props.setprogress(true)
             axios.get('/api/student/studentDelete/'+id).then((res)=>{
-                    // history.push('/allStudents')
-                    history.goBack()
+                    props.setreloader(!props.reloader)
                 }) 
         
     }
-    return (props.value.length ? (<div>
+    const selectHandler =(id,select)=>{
+        props.setprogress(true)
+        axios.get('/api/student/selectStudent/'+id+'/'+select).then((res)=>{
+            props.setreloader(!props.reloader)
+
+        }) 
+    }
+    return props.progress ? <img src={lodr} alt="Loading..."></img>:(props.value.length ? (<div>
         <div className="card height-auto">
               <div className="card-body">
-                  <div className="heading-layout1">
+                 {props.teacher?null: <div className="heading-layout1">
                       <div className="item-title">
                           <h3>{props.title}</h3>
                       </div>
-                  </div>
+                  </div>}
                 {props.student ? <div><div  className="mg-b-20">
                       <div className="row gutters-8">
                          
@@ -46,9 +51,10 @@ function allstudentsSub(props) {
                       <table className="table display data-table text-nowrap">
                           <thead>
                               <tr>
+                                  <th></th>
                                   <th>
-                                      <div className="form-check">
-                                          <input type="checkbox" className="form-check-input checkAll"/>
+                                      <div className="form-chec">
+                                          {/* <input type="checkbox" className="form-check-input checkAll"/> */}
                                           <label className="form-check-label">Name</label>
                                       </div>
                                   </th>
@@ -75,9 +81,11 @@ function allstudentsSub(props) {
                                   //obj.items ? item = obj.items.split(',') : console.log('no item');
                                   return (
                                       <tr key={obj._id}>
+                                         <td> {obj.select !=='undefined' ? obj.select === 'true' ?<i className="fas fa-check-circle"></i>:null:null}</td>
                                           <td>
-                                              <div className="form-check">
-                                                  <input type="checkbox" className="form-check-input"/>
+                                              <div className="form-chec">
+                                                  {/* <input type="checkbox" className="form-check-input"/> */}
+                                                  
                                                   <label className="form-check-label">{obj.name}</label>
                                               </div>
                                           </td>
@@ -118,14 +126,22 @@ function allstudentsSub(props) {
 
 
                                                       <button className="dropdown-item" ><span> <Link to={{pathname:'/studentEdit/'+obj._id}}>
-                                                         <i className="fas fa-cogs text-dark-pastel-green">Edit</i> </Link></span></button>
+                                                         <i className="fas fa-cogs text-dark-pastel-green"> Edit</i> </Link></span></button>
 
                                                         
                                                          <button  className="dropdown-item"> <span onClick={()=>{setconfirm({isOpen:true,title:"Confirm Delete",subtitle:"Deleted student data can't be recovered",onConfirm:()=> onDelete(obj._id)})}} >
-                                                          <i className="fas fa-times text-orange-red">Delete</i>  </span></button>
+                                                          <i className="fas fa-times text-orange-red"> Delete</i>  </span></button>
                                                         
                                                          <button className="dropdown-item"> <span><Link to={{pathname:'/studentDetails/'+obj._id}}  >
-                                                          <i className="fas fa-redo-alt text-orange-peel">View Profile</i></Link></span></button>
+                                                          <i className="fas fa-redo-alt text-orange-peel"> View Profile</i></Link></span></button>
+
+                                                          {obj.select !=='undefined' ?obj.select === 'true'?
+                                                          <button onClick={()=>selectHandler(obj._id,false)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> DeSelect</i></button>:
+                                                          <button onClick={()=>selectHandler(obj._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>:
+                                                          <button onClick={()=>selectHandler(obj._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>}
+                                                          
+
+                                                          
                                                   
                                                   </Dropdown.Menu>
                                                   

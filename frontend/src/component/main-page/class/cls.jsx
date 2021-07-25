@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Dropdown from 'react-bootstrap/Dropdown';
-import {Link, useHistory} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {useParams} from 'react-router-dom'
 import Alert from '../../alert'
 import axios from 'axios'
@@ -14,8 +14,9 @@ function cls() {
     const {clas} = useParams()
     let serchList = null;
     const [serchName, setserchName] = useState('')
-    const history = useHistory()
     const [confirm, setconfirm] = useState({isOpen: false})
+    const [reloader, setreloader] = useState(true)
+    const [progress, setprogress] = useState(false)
 
     const onDelete = id => {
         setconfirm({
@@ -23,25 +24,31 @@ function cls() {
             isOpen: false
         });
 
-        history.push('/allStudents', [true])
+        setprogress(true)
         axios.get('/api/student/studentDelete/' + id).then((res) => {
-            // history.push('/allStudents')
-            history.goBack()
+            setreloader(!reloader)
         })
 
     }
     useEffect(() => {
         axios.get('/api/student/getStudents/class/' + clas).then((res) => {
             setdata(res.data)
+            setprogress(false)
         })
-    }, [clas])
+    }, [clas,reloader])
 
     const printHandler=()=>{
         window.print();
     }
 
+    const selectHandler =(id,select)=>{
+        setprogress(true)
+        axios.get('/api/student/selectStudent/'+id+'/'+select).then((res)=>{
+            setreloader(!reloader)
+        }) 
+    }
 
-    return data ? (
+    return progress ? <img src={lodr} alt="loader"></img> : data ? (
         <div>
             <div className="dashboard-content-one">
                 <div className="breadcrumbs-area">
@@ -93,9 +100,9 @@ function cls() {
                             <table className="table display data-table text-nowrap">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>
-                                            <div className="form-check">
-                                                <input type="checkbox" className="form-check-input checkAll"/>
+                                            <div className="form-chec">
                                                 <label className="form-check-label">Name</label>
                                             </div>
                                         </th>
@@ -121,9 +128,9 @@ function cls() {
                                             <tr key={
                                                 obj._id
                                             }>
+                                                <td> {obj.select !=='undefined' ? obj.select === 'true' ?<i className="fas fa-check-circle"></i>:null:null}</td>
                                                 <td>
-                                                    <div className="form-check">
-                                                        <input type="checkbox" className="form-check-input"/>
+                                                    <div className="form-chec">
                                                         <label className="form-check-label">
                                                             {
                                                             obj.name
@@ -206,7 +213,11 @@ function cls() {
                                                                     </Link>
                                                                 </span>
                                                             </button>
-
+                                                            {obj.select !=='undefined' ?obj.select === 'true'?
+                                                          <button onClick={()=>selectHandler(obj._id,false)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> DeSelect</i></button>:
+                                                          <button onClick={()=>selectHandler(obj._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>:
+                                                          <button onClick={()=>selectHandler(obj._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>}
+                                                          
                                                         </Dropdown.Menu>
 
                                                     </Dropdown>
@@ -225,8 +236,7 @@ function cls() {
             </div>
         </div>
 
-    </div>
-    ) : <img src={lodr}
-            alt="loader"></img>
+    </div> 
+    ):<img src={lodr} alt="Loading..."></img>
 }
 export default cls

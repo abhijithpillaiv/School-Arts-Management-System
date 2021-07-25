@@ -21,6 +21,12 @@ module.exports={
            resolve(student)
         })
     },
+    getSelectedStudent:(cat)=>{
+        return new promise(async(resolve,reject)=>{
+           let student = await db.get().collection(collection.student).find({"category":cat,"select":'true'}).sort({"name":1}).toArray()
+           resolve(student)
+        })
+    },
     getStudentCount:()=>{
         return new promise(async(resolve,reject)=>{
            let student = await db.get().collection(collection.student).find().count()
@@ -61,6 +67,18 @@ module.exports={
                     admnId:data.admnId,
                     phoneNum:data.phoneNum,
                     image:data.image,
+                }
+            }).then((response)=>{
+                resolve(response)
+            })
+        })
+    },
+    updateSelect:(id,data)=>{
+        return new Promise((resolve,reject)=>{
+            console.log('inside helper '+ data);
+            db.get().collection(collection.student).updateOne({_id:ObjectID(id)},{
+                $set:{
+                   select:data,
                 }
             }).then((response)=>{
                 resolve(response)

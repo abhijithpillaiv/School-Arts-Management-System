@@ -8,8 +8,7 @@ function studentEdit() {
     const [Details, setDetails] = useState(null)
     useEffect(() => {
         axios.get('/api/student/studentDetail/'+id).then((res) => {
-            setDetails(res.data);
-            
+            setDetails(res.data);  
         })
     }, [])
 

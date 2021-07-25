@@ -41,6 +41,15 @@ router.get('/getStudents/:cat',((req,res)=>{
     
 }))
 
+router.get('/getSelectedStudents/:cat',((req,res)=>{
+  
+  studentHelper.getSelectedStudent(req.params.cat).then((data)=>{
+    console.log(data);
+    res.send(data)
+    })
+    
+}))
+
 router.get('/getStudents/class/:clas',((req,res)=>{
   
   studentHelper.getStudentByClass(req.params.clas).then((data)=>{
@@ -70,6 +79,13 @@ router.get('/studentDetail/:id',((req,res)=>{
     console.log(data);
     res.send(data);
   })
+}))
+
+router.get('/selectStudent/:id/:select',((req,res)=>{
+
+  studentHelper.updateSelect(req.params.id,req.params.select).then((response)=>{
+      res.send(response)
+      })
 }))
 
 router.post('/studentEdit',upload.single('image'), function(req, res) {

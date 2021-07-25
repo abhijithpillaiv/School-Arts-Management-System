@@ -83,6 +83,7 @@ function addStudent() {
                 headers: { "Content-Type": "multipart/form-data" }
               }).then((response)=>{
                      setPreview(null);
+                     setimag('')
                      setprogress(false)
                       history.push('/addStudent/'+cate)
                 })

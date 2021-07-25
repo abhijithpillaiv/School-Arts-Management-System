@@ -1,8 +1,8 @@
 {
   "main.css": "static/css/main.12fba204.css",
   "main.css.map": "static/css/main.12fba204.css.map",
-  "main.js": "static/js/main.d4e0917a.js",
-  "main.js.map": "static/js/main.d4e0917a.js.map",
+  "main.js": "static/js/main.a1e5d181.js",
+  "main.js.map": "static/js/main.a1e5d181.js.map",
   "static/media/ATB3o.gif": "static/media/ATB3o.e38768f0.gif",
   "static/media/Flaticon.eot": "static/media/Flaticon.6193cd96.eot",
   "static/media/Flaticon.svg": "static/media/Flaticon.d8b586eb.svg",
@@ -38,5 +38,6 @@
   "static/media/logo.jpeg": "static/media/logo.8e17a8a2.jpeg",
   "static/media/markers.png": "static/media/markers.a3538bd2.png",
   "static/media/menu.png": "static/media/menu.e2ce9bf1.png",
-  "static/media/serch.png": "static/media/serch.e9485a37.png"
+  "static/media/serch.png": "static/media/serch.e9485a37.png",
+  "static/media/slt.jpg": "static/media/slt.3f1f7642.jpg"
 }
