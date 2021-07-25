@@ -5,9 +5,12 @@ import Item from './studentItem'
 import lodr from './ATB3o.gif'
 import {LoginContext} from '../../context'
 import { useEffect } from 'react'
+import a from './a.png'
+
 
 function studentEditsub({preData}) {
 
+    const [Preview, setPreview] = useState(null)
     const [selectcat00, setselectcat00] = useState(false)
     const [selectcat0, setselectcat0] = useState(false)
     const [selectcat1, setselectcat1] = useState(false)
@@ -16,7 +19,7 @@ function studentEditsub({preData}) {
     const [selectcat4, setselectcat4] = useState(false)
 
     const {User} = useContext(LoginContext)
-       const{_id,name,gender,dob,roll,category,clas,section,admnId,phoneNum,}=preData
+       const{_id,name,gender,dob,roll,category,clas,section,admnId,phoneNum,image}=preData
        const [cate, setcate] = useState(null)
 
        useEffect(() => {
@@ -40,6 +43,7 @@ function studentEditsub({preData}) {
         const [Section, setSection] = useState(section)
         const [AdmnId, setAdmnId] = useState(admnId)
         const [PhoneNum, setPhoneNum] = useState(phoneNum)
+        const [setImage, setsetImage] = useState('')
 
         useEffect(() => {
             setselectcat00(false)
@@ -71,11 +75,13 @@ function studentEditsub({preData}) {
         formdata.append('items',item);
         formdata.append('category',Cat)
         formdata.append('_id',_id)
+        formdata.append('oldImage',image)
+        formdata.append('image',setImage[0])
     
         setprogress(true)
         axios({
             method: "post",
-            url: '/api/student/studentEdit/',
+            url: '/api/student/studentEdit',
             data: formdata,
             headers: { "Content-Type": "multipart/form-data" },
           }).then((response)=>{
@@ -203,8 +209,10 @@ function studentEditsub({preData}) {
                             </div>
 
                             <div className="col-lg-6 col-12 form-group mg-t-30">
-                                <label className="text-dark-medium">Upload Student Photo (Coming Soon)</label>
-                                <input   type="file" className="form-control-file"/></div>
+                               {Preview ? <img width="70px" height="70px" src={Preview}  alt=''/> :image !=="undefined" ? <img width="70px" height="70px" src={"http://localhost:9000/image/"+image}  alt=''/> :<img width="70px" height="70px" src={a}  alt=''/>}
+                                <label className="text-dark-medium">Upload Student Image</label>
+                                <input onChange={(e)=>{setsetImage(e.target.files);setPreview( URL.createObjectURL(e.target.files[0]))}}   type="file" className="form-control-file"/>
+                            </div>
 
 
                             <div className="col-12 form-group mg-t-8">

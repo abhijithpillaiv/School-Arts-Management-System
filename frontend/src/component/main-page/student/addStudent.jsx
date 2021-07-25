@@ -3,9 +3,10 @@ import {Link,useHistory, useParams} from 'react-router-dom'
 import axios from 'axios'
 import Item from './studentItem'
 import lodr from './ATB3o.gif'
+import a from './a.png'
 
 function addStudent() {
-
+    const [Preview, setPreview] = useState(null)
     const [selectcat00, setselectcat00] = useState(false)
     const [selectcat0, setselectcat0] = useState(false)
     const [selectcat1, setselectcat1] = useState(false)
@@ -81,6 +82,7 @@ function addStudent() {
                 data: formdata,
                 headers: { "Content-Type": "multipart/form-data" }
               }).then((response)=>{
+                     setPreview(null);
                      setprogress(false)
                       history.push('/addStudent/'+cate)
                 })
@@ -195,8 +197,9 @@ function addStudent() {
 
 
                             <div className="col-lg-6 col-12 form-group mg-t-30">
+                             {Preview ? <img width="70px" height="70px" src={Preview}  alt=''/> :<img width="70px" height="70px" src={a}  alt=''/>}
                                 <label className="text-dark-medium">Upload Student Photo (150px X 150px)</label>
-                                <input onChange={(e)=>setimag(e.target.files)} type="file" className="form-control-file"/></div>
+                                <input onChange={(e)=>{setimag(e.target.files);setPreview( URL.createObjectURL(e.target.files[0]))}} type="file" className="form-control-file"/></div>
 
 
                             <div className="col-12 form-group mg-t-8">

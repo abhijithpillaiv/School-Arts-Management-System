@@ -107,7 +107,7 @@ function teacherClasSub(props) {
 
                                           <td>{ obj.section}</td>
                                           <td>{obj.admnId}</td>
-                                          <td className="text-center"><img width="50px" height="50px" src={a} alt=""/></td>
+                                          <td className="text-center">{obj.image!==undefined ? <img width="70px" height="70px" src={"http://localhost:9000/image/"+obj.image}  alt=''/> :<img width="70px" height="70px" src={a}  alt=''/>}</td>
                                           <td>
                                         <Dropdown>
                                               <Dropdown.Toggle variant={null}>

@@ -60,6 +60,7 @@ module.exports={
                     section:data.section,
                     admnId:data.admnId,
                     phoneNum:data.phoneNum,
+                    image:data.image,
                 }
             }).then((response)=>{
                 resolve(response)

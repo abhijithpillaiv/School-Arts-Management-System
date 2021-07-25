@@ -43,6 +43,9 @@ cat1 : [
   {label: 'News Reading Eng', value: 'News Reading Eng' },
   {label: 'news Reading Mal', value: 'news Reading Mal' },
   {label: 'News Reading Hindi', value: 'News Reading Hindi' },
+  {label: 'Hand writing Eng', value: 'Hand writing Eng' },
+  {label: 'Hand writing Mal', value: 'Hand writing Mal' },
+  {label: 'Hand writing Hindi', value: 'Hand writing Hindi' },
   ],
   
 
@@ -77,9 +80,13 @@ cat1 : [
   {label: 'news Reading Mal', value: 'news Reading Mal' },
   {label: 'News Reading Hindi', value: 'News Reading Hindi' },
   {label: ' classical music', value: ' classical music' },
+  {label: ' Translation Eng', value: ' Translation Eng' },
+  {label: ' Translation Mal', value: ' Translation Mal' },
+  {label: ' Translation Hindi', value: ' Translation Hindi' },
+
   ],
  
-
+  
 
   cat3 : [
     {label: 'Pencil drawing', value: 'Pencil drawing' },
