@@ -105,7 +105,7 @@ function mainPage() {
                                 </div>
                               
                                 <div>
-                                    <Student home={true} setstudentCount={setstudentCount} cat={'null'}></Student>
+                                    <Student home={true} admin={true} setstudentCount={setstudentCount} cat={'null'}></Student>
                                 </div>
                             </div>
                         </div>

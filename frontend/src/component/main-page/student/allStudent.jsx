@@ -45,9 +45,10 @@ useEffect(() => {
             props.setstudentCount(res.data);
         })
     }
+    if(props.admin === true){
     axios.get('/api/student/getStudentCount').then((res) => {
         props.setstudentCount(res.data);
-   })
+   })}
     setdlt(false)
     setprogress(false)
 }, [dlt,reloader])
