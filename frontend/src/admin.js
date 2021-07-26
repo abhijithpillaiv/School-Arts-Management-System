@@ -33,7 +33,7 @@ function admin() {
         <div className="dashboard-content-one">
           <Route exact component={MainPage} path="/" />
           <Route exact component={AddStudent} path="/addStudent/:cat" />
-          <Route exact component={AllStudents} path="/allStudents" />
+          <Route  path="/allStudents" ><AllStudents cat={"null"}></AllStudents></Route>
           <Route exact component={SelectedStudents} path="/selectedStudents/:cat" />
           <Route path="/studentDetails/:id">
             <StudentDetails />

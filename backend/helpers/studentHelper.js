@@ -17,7 +17,7 @@ module.exports={
     },
     getStudent:(cat)=>{
         return new promise(async(resolve,reject)=>{
-           let student = await db.get().collection(collection.student).find({"category":cat}).sort({"name":1}).toArray()
+           let student = await db.get().collection(collection.student).find({"category":cat}).sort({'select':1,"name":1}).toArray()
            resolve(student)
         })
     },

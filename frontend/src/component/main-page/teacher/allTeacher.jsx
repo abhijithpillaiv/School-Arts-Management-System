@@ -27,9 +27,11 @@ function allTeacher(props) {
         axios.get('/api/teacher/allTeacher').then((res) => {
             setteacher(res.data);
         })
-        axios.get('/api/teacher/getTeacherCount').then((res) => {
-            props.setteacherCount(res.data);
-        })
+        if(props.home === true){
+            axios.get('/api/teacher/getTeacherCount').then((res) => {
+                props.setteacherCount(res.data);
+            })
+        }
         setprogress(false)
     }, [reloader])
     return progress ? <img src={lodr} alt="loader"></img> :(

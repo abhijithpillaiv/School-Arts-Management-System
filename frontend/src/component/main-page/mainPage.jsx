@@ -119,7 +119,7 @@ function mainPage() {
                                     </div>
                                   
                                 </div>
-                                <Teachers setteacherCount={setteacherCount} teacher={true}/>
+                                <Teachers home={true} setteacherCount={setteacherCount} teacher={true}/>
                             </div>
                         </div>
                     </div>
