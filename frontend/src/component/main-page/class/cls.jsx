@@ -50,7 +50,7 @@ function cls() {
 
     return progress ? <img src={lodr} alt="loader"></img> : data ? (
         <div>
-            <div className="dashboard-content-one">
+            <div className="dashboard-content-on">
                 <div className="breadcrumbs-area">
                     <h3>Student
                     </h3>
