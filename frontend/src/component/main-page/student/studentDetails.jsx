@@ -47,7 +47,9 @@ function studentDetails() {
                                 <div className="header-elements">
                                     <ul>
                                         <li><button to={{pathname:'/studentEdit/'+id}}><i className="far fa-edit"></i></button></li>
+                                        <li></li><li></li>
                                         <li><button to=''><i className="fas fa-print"></i></button></li>
+                                        <li></li><li></li>
                                         <li><button onClick={printHandler}><i className="fas fa-download"></i></button></li>
                                     </ul>
                                 </div>

@@ -18,22 +18,20 @@ function cls() {
     const [reloader, setreloader] = useState(true)
     const [progress, setprogress] = useState(false)
 
-    const onDelete = id => {
-        setconfirm({
-            ...confirm,
-            isOpen: false
-        });
-
+    const onDelete=(id,index)=>{
+        setconfirm({...confirm, isOpen:false});
         setprogress(true)
-        axios.get('/api/student/studentDelete/' + id).then((res) => {
-            setreloader(!reloader)
-        })
-
+            axios.get('/api/student/studentDelete/'+id).then((res)=>{
+                    // props.setreloader(!props.reloader)
+                    data.splice(index,1)
+                    setprogress(false)
+                }) 
+        
     }
     useEffect(() => {
         axios.get('/api/student/getStudents/class/' + clas).then((res) => {
             setdata(res.data)
-            setprogress(false)
+            // setprogress(false)
         })
     }, [clas,reloader])
 
@@ -116,14 +114,15 @@ function cls() {
                                     </tr>
                                 </thead>
                                 <tbody>{
-                                    data.filter((obj) => {
+                                    data.sort((obj,obj2)=>obj.select===obj2.select?obj.name.toLowerCase()>obj2.name.toLowerCase()?1:-1:obj.select==='true'?-1:1)
+                                    .filter((obj) => {
                                         if (serchName === '') {
                                             serchList = obj
                                         } else if (obj.name.toString().toLowerCase().includes(serchName.toString().toLowerCase())) {
                                             serchList = obj
                                         } else {}
                                         return serchList
-                                    }).map((obj) => { // obj.items ? item = obj.items.split(',') : console.log('no item');
+                                    }).map((obj,index) => { // obj.items ? item = obj.items.split(',') : console.log('no item');
                                         return (
                                             <tr key={
                                                 obj._id
@@ -194,7 +193,7 @@ function cls() {
                                                                             isOpen: true,
                                                                             title: "Confirm Delete",
                                                                             subtitle: "Deleted student data can't be recovered",
-                                                                            onConfirm: () => onDelete(obj._id)
+                                                                            onConfirm: () => onDelete(obj._id,index)
                                                                         })
                                                                     }
                                                                 }>

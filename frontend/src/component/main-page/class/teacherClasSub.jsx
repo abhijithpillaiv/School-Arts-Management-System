@@ -12,32 +12,30 @@ function teacherClasSub(props) {
     let serchList = null;
     const [serchName, setserchName] = useState('')
     const [confirm, setconfirm] = useState({isOpen: false})
-    const [reloader, setreloader] = useState(true)
     const [progress, setprogress] = useState(false)
 
-    const onDelete = id => {
-        setconfirm({
-            ...confirm,
-            isOpen: false
-        });
-
+    const onDelete=(id,index)=>{
+        setconfirm({...confirm, isOpen:false});
         setprogress(true)
-        axios.get('/api/student/studentDelete/' + id).then((res) => {
-            setreloader(!reloader)
-        })
-
+            axios.get('/api/student/studentDelete/'+id).then((res)=>{
+                    // props.setreloader(!props.reloader)
+                    data.splice(index,1)
+                    setprogress(false)
+                }) 
+        
     }
     useEffect(() => {
         axios.get('/api/student/getStudents/class/' + props.clas).then((res) => {
             setdata(res.data)
             setprogress(false)
         })
-    }, [props.clas,reloader])
+    }, [props.clas])
 
-    const selectHandler =(id,select)=>{
+    const selectHandler =(id,obj,select)=>{
         setprogress(true)
         axios.get('/api/student/selectStudent/'+id+'/'+select).then((res)=>{
-            setreloader(!reloader)
+            obj.select = select
+            setprogress(false)
         }) 
     }
 
@@ -64,7 +62,7 @@ function teacherClasSub(props) {
                       <table className="table display data-table text-nowrap">
                           <thead>
                               <tr>
-                                  <th></th>
+                              <th></th>
                                   <th>
                                       <div className="form-chec">
                                           <label className="form-check-label">Name</label>
@@ -73,14 +71,15 @@ function teacherClasSub(props) {
                                   <th>Roll Num</th>
                                   <th>Gender</th>
                                   <th>Item</th>
-                                  <th>class</th>
+                                  <th></th>
                                   <th>Section</th>
                                   <th>Admn Num</th>
                                   <th>Photo</th>
                               </tr>
                           </thead>
                           <tbody>{
-                              data.filter((obj)=>{
+                              data.sort((obj,obj2)=>obj.select===obj2.select?obj.name.toLowerCase()>obj2.name.toLowerCase()?1:-1:obj.select==='true'?-1:1)
+                              .filter((obj)=>{
                                 if(serchName === ''){
                                     serchList = obj
                                 }
@@ -89,62 +88,65 @@ function teacherClasSub(props) {
                                 }
                                 else{}
                                 return serchList
-                            }).map((obj) => {
+                            }).map((obj,index) => {
                                   //obj.items ? item = obj.items.split(',') : console.log('no item');
                                   return (
-                                      <tr key={obj._id}>
-                                          <td>
-                                          <td> {obj.select !=='undefined' ? obj.select === 'true' ?<i className="fas fa-check-circle"></i>:null:null}</td>
-                                              <div className="form-chec">
-                                                  <label className="form-check-label">{obj.name}</label>
-                                              </div>
-                                          </td>
-                                          <td>{obj.roll}</td>
-                                          <td>{obj.gender}</td>
+                                    <tr key={obj._id}>
+                                    <td> {obj.select !=='undefined' ? obj.select === 'true' ?<i className="fas fa-check-circle"></i>:null:null}</td>
+                                     <td>
+                                         <div className="form-chec">
+                                             {/* <input type="checkbox" className="form-check-input"/> */}
+                                             
+                                             <label className="form-check-label">{obj.name}</label>
+                                         </div>
+                                     </td>
+                                     <td>{obj.roll}</td>
+                                     <td>{obj.gender}</td>
 
-                                          <td>{obj.items ? (obj.items.map((obj)=>{
-                                              return(
-                                                  <div key={obj}>{obj}
-                                                  <br></br>
-                                                  </div>
-                                                  
-                                              )
-                                          })) : null} </td>
-                                          
-                                          <td>{obj.clas}</td>
-
-                                          <td>{ obj.section}</td>
-                                          <td>{obj.admnId}</td>
-                                          <td className="text-center">{obj.image!=="undefined" ? <img width="70px" height="70px" src={"http://localhost:9000/image/"+obj.image}  alt=''/> :<img width="70px" height="70px" src={a}  alt=''/>}</td>
-                                          <td>
-                                        <Dropdown>
-                                              <Dropdown.Toggle variant={null}>
-                                                      <span className="flaticon-more-button-of-three-dots"></span>
-                                             </Dropdown.Toggle>
-                                                   <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
+                                     <td>{obj.items ? (obj.items.map((obj)=>{
+                                         return(
+                                             <div key={obj}>{obj}
+                                             <br></br>
+                                             </div>
+                                             
+                                         )
+                                     })) : null} </td>
+                                     <td></td>
+                                     <td>{ obj.section}</td>
+                                     <td>{obj.admnId}</td>
+                                     <td className="text-center">{obj.image === "undefined" ? <img width="70px" height="70px" src={a}  alt=''/> : <img width="70px" height="70px" src={"http://localhost:9000/image/"+obj.image}  alt=''/> }</td>
+                                     <td>
+                                   <Dropdown>
+                                         <Dropdown.Toggle variant={null}>
+                                                 <span className="flaticon-more-button-of-three-dots"></span>
+                                        </Dropdown.Toggle>
+                                              <Dropdown.Menu className="dropdown-menu dropdown-menu-right">
 
 
-                                                      <button className="dropdown-item" ><span> <Link to={{pathname:'/studentEdit/'+obj._id}}>
-                                                         <i className="fas fa-cogs text-dark-pastel-green">Edit</i> </Link></span></button>
+                                                 <button className="dropdown-item" ><span> <Link to={{pathname:'/studentEdit/'+obj._id}}>
+                                                    <i className="fas fa-cogs text-dark-pastel-green"> Edit</i> </Link></span></button>
 
-                                                        
-                                                         <button  className="dropdown-item"> <span onClick={()=>{setconfirm({isOpen:true,title:"Confirm Delete",subtitle:"Deleted student data can't be recovered",onConfirm:()=> onDelete(obj._id)})}} >
-                                                          <i className="fas fa-times text-orange-red">Delete</i>  </span></button>
-                                                        
-                                                         <button className="dropdown-item"> <span><Link to={{pathname:'/studentDetails/'+obj._id}}  >
-                                                          <i className="fas fa-redo-alt text-orange-peel">View Profile</i></Link></span></button>
-                                                  
-                                                          {obj.select !=='undefined' ?obj.select === 'true'?
-                                                          <button onClick={()=>selectHandler(obj._id,false)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> DeSelect</i></button>:
-                                                          <button onClick={()=>selectHandler(obj._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>:
-                                                          <button onClick={()=>selectHandler(obj._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>}
-                                                          
-                                                  </Dropdown.Menu>
-                                                  
-                                        </Dropdown>
-                                          </td>
+                                                   
+                                                    <button  className="dropdown-item"> <span onClick={()=>{setconfirm({isOpen:true,title:"Confirm Delete",subtitle:"Deleted student data can't be recovered",onConfirm:()=> onDelete(obj._id,index)})}} >
+                                                     <i className="fas fa-times text-orange-red"> Delete</i>  </span></button>
+                                                   
+                                                    <button className="dropdown-item"> <span><Link to={{pathname:'/studentDetails/'+obj._id}}  >
+                                                     <i className="fas fa-redo-alt text-orange-peel"> View Profile</i></Link></span></button>
 
-                                      </tr>
+                                                     {obj.select !=='undefined' ?obj.select === 'true'?
+                                                     <button onClick={()=>selectHandler(obj._id,obj,"false")} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> DeSelect</i></button>:
+                                                     <button onClick={()=>selectHandler(obj._id,obj,"true")} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>:
+                                                     <button onClick={()=>selectHandler(obj._id,obj,"true")} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>}
+                                                     
+
+                                                     
+                                             
+                                             </Dropdown.Menu>
+                                             
+                                   </Dropdown>
+                                     </td>
+
+                                 </tr>
                                   )
                               })
                           }</tbody>

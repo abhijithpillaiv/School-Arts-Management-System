@@ -29,6 +29,14 @@ function login() {
         })
         // Write to='' submit parameters are email, pwd
     }
+    const passwordHandler=()=>{
+        var x = document.getElementById("myInput");
+        if (x.type === "password") {
+          x.type = "text";
+        } else {
+          x.type = "password";
+        }
+    }
     return (
         <div className="limiter">
             <div className="container-login100">
@@ -43,7 +51,7 @@ function login() {
                             Member Login
                         </span>
 
-                        {incorrect ?<h5 style={{color: "red"}}>            Incorrect Password or Email</h5> :null} 
+                        {incorrect ?<h5 style={{color: "red"}}>            Incorrect Email or Password</h5> :null} 
 
                         <div className="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
                             <input className="input100" type="text"
@@ -60,7 +68,7 @@ function login() {
                         
                         <div className="wrap-input100 validate-input" data-validate="Password is required">
                         
-                            <input className="input100" type="password"
+                            <input className="input100"  type="password" id="myInput"
                                 value={Password}
                                 onChange={
                                     (e) => setPassword(e.target.value)
@@ -72,6 +80,7 @@ function login() {
                                 
                             </span>
                         </div>
+                        <div style={{position: 'relative',left:"35px",fontWeight:'bold'}}><input onClick={passwordHandler} type="checkbox" className=""/>     Show Password</div>
 
                         <div className="container-login100-form-btn">
                             <button className="login100-form-btn">

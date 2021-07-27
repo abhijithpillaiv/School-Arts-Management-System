@@ -13,7 +13,6 @@ function selectedStudents(props) {
     const [cat3, setcat3] = useState(null)
     const [cat4, setcat4] = useState(null)
     const [progress, setprogress] = useState(true)
-    const [reloader, setreloader] = useState(true)
 
     useEffect(() => {
         if(cat === "cat00"||cat === "null"){
@@ -41,7 +40,7 @@ function selectedStudents(props) {
              setcat4(res.data);
         })}
         setprogress(false)
-    }, [cat,reloader])
+    }, [cat])
 
     const printHandler=()=>{
         window.print();
@@ -68,12 +67,12 @@ function selectedStudents(props) {
                       <button onClick={printHandler}><i  className="fas fa-download"></i></button>
                 </div>
                
-                {cat00 ?<Students  student={true}    setreloader={setreloader} reloader={reloader}    setprogress={setprogress} progress={progress} cat="cat00" title='Category 00' value={cat00}/> :null}
-            {cat0 ?<Students  student={true}  setreloader={setreloader} reloader={reloader}    setprogress={setprogress} progress={progress} cat="cat0" title='Category 0' value={cat0}/> :null}
-            {cat1 ?<Students  student={true}  setreloader={setreloader} reloader={reloader}    setprogress={setprogress} progress={progress} cat="cat1" title='Category 1' value={cat1}/> :null}
-            {cat2 ?<Students  student={true}  setreloader={setreloader} reloader={reloader}    setprogress={setprogress} progress={progress} cat="cat2" title='Category 2' value={cat2}/> :null}
-            {cat3 ?<Students  student={true}  setreloader={setreloader} reloader={reloader}    setprogress={setprogress} progress={progress} cat="cat3" title='Category 3' value={cat3}/> :null}
-            {cat4 ?<Students  student={true}  setreloader={setreloader} reloader={reloader}    setprogress={setprogress} progress={progress} cat="cat4" title='Category 4' value={cat4}/> :null}
+                {cat00 ?<Students selectedPage={true} student={true}     cat="cat00" title='Category 00' value={cat00}/> :null}
+            {cat0 ?<Students  selectedPage={true} student={true}   cat="cat0" title='Category 0' value={cat0}/> :null}
+            {cat1 ?<Students  selectedPage={true} student={true}   cat="cat1" title='Category 1' value={cat1}/> :null}
+            {cat2 ?<Students  selectedPage={true} student={true}   cat="cat2" title='Category 2' value={cat2}/> :null}
+            {cat3 ?<Students  selectedPage={true} student={true}   cat="cat3" title='Category 3' value={cat3}/> :null}
+            {cat4 ?<Students  selectedPage={true} student={true}   cat="cat4" title='Category 4' value={cat4}/> :null}
             </div>
             
         </div>

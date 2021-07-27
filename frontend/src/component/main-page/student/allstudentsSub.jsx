@@ -12,23 +12,30 @@ function allstudentsSub(props) {
     let serchList = null;
     const [serchName, setserchName] = useState('')
     const [confirm, setconfirm] = useState({isOpen:false})
+    const [progress, setprogress] = useState(false)
     
-    const onDelete=id=>{
+    const onDelete=(id,index)=>{
         setconfirm({...confirm, isOpen:false});
-        props.setprogress(true)
+        setprogress(true)
             axios.get('/api/student/studentDelete/'+id).then((res)=>{
-                    props.setreloader(!props.reloader)
+                    // props.setreloader(!props.reloader)
+                    props.value.splice(index,1)
+                    props.setstate(props.value.length) 
+                    setprogress(false)
                 }) 
         
     }
-    const selectHandler =(id,select)=>{
-        props.setprogress(true)
+    const selectHandler =(id,obj,select,index)=>{
+        setprogress(true)
         axios.get('/api/student/selectStudent/'+id+'/'+select).then((res)=>{
-            props.setreloader(!props.reloader)
-
+            obj.select = select
+            if(props.selectedPage){
+                props.value.splice(index,1)
+            }
+            setprogress(false)
         }) 
     }
-    return props.progress ? <img src={lodr} alt="Loading..."></img>:(props.value.length ? (<div>
+    return progress ? <img src={lodr} alt="Loading..."></img>:(props.value.length ? (<div>
         <div className="card height-auto">
               <div className="card-body">
                  {props.teacher?null: <div className="heading-layout1">
@@ -68,7 +75,8 @@ function allstudentsSub(props) {
                               </tr>
                           </thead>
                           <tbody>{
-                              props.value.filter((obj)=>{
+                              props.value.sort((obj,obj2)=>obj.select===obj2.select?obj.name.toLowerCase()>obj2.name.toLowerCase()?1:-1:obj.select==='true'?-1:1)
+                              .filter((obj)=>{
                                 if(serchName === ''){
                                     serchList = obj
                                 }
@@ -77,7 +85,7 @@ function allstudentsSub(props) {
                                 }
                                 else{}
                                 return serchList
-                            }).map((obj) => {
+                            }).map((obj,index) => {
                                   //obj.items ? item = obj.items.split(',') : console.log('no item');
                                   return (
                                       <tr key={obj._id}>
@@ -129,16 +137,16 @@ function allstudentsSub(props) {
                                                          <i className="fas fa-cogs text-dark-pastel-green"> Edit</i> </Link></span></button>
 
                                                         
-                                                         <button  className="dropdown-item"> <span onClick={()=>{setconfirm({isOpen:true,title:"Confirm Delete",subtitle:"Deleted student data can't be recovered",onConfirm:()=> onDelete(obj._id)})}} >
+                                                         <button  className="dropdown-item"> <span onClick={()=>{setconfirm({isOpen:true,title:"Confirm Delete",subtitle:"Deleted student data can't be recovered",onConfirm:()=> onDelete(obj._id,index)})}} >
                                                           <i className="fas fa-times text-orange-red"> Delete</i>  </span></button>
                                                         
                                                          <button className="dropdown-item"> <span><Link to={{pathname:'/studentDetails/'+obj._id}}  >
                                                           <i className="fas fa-redo-alt text-orange-peel"> View Profile</i></Link></span></button>
 
                                                           {obj.select !=='undefined' ?obj.select === 'true'?
-                                                          <button onClick={()=>selectHandler(obj._id,false)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> DeSelect</i></button>:
-                                                          <button onClick={()=>selectHandler(obj._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>:
-                                                          <button onClick={()=>selectHandler(obj._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>}
+                                                          <button onClick={()=>selectHandler(obj._id,obj,"false",index)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> DeSelect</i></button>:
+                                                          <button onClick={()=>selectHandler(obj._id,obj,"true")} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>:
+                                                          <button onClick={()=>selectHandler(obj._id,obj,"true")} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>}
                                                           
 
                                                           

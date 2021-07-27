@@ -17,13 +17,13 @@ module.exports={
     },
     getStudent:(cat)=>{
         return new promise(async(resolve,reject)=>{
-           let student = await db.get().collection(collection.student).find({"category":cat}).sort({'select':1,"name":1}).toArray()
+           let student = await db.get().collection(collection.student).find({"category":cat}).toArray()//.sort({'name':1})
            resolve(student)
         })
     },
     getSelectedStudent:(cat)=>{
         return new promise(async(resolve,reject)=>{
-           let student = await db.get().collection(collection.student).find({"category":cat,"select":'true'}).sort({"name":1}).toArray()
+           let student = await db.get().collection(collection.student).find({"category":cat,"select":'true'}).toArray()
            resolve(student)
         })
     },
@@ -42,7 +42,7 @@ module.exports={
     
     getStudentByClass:(clas)=>{
         return new promise(async(resolve,reject)=>{
-           let student = await db.get().collection(collection.student).find({"clas":clas}).sort({"name":1}).toArray()
+           let student = await db.get().collection(collection.student).find({"clas":clas}).toArray()
            resolve(student)
         })
     },

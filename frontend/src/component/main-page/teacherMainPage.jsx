@@ -10,7 +10,7 @@ import itemList from './student/itemList'
 function teacherMainPage() {
     const {User} = useContext(LoginContext)
     const state = User.user.category;
-    const [studentCount, setstudentCount] = useState(null)
+   const [studentCount, setstudentCount] = useState(null)
 
     console.log(User);
 
@@ -40,7 +40,7 @@ function teacherMainPage() {
                                     <div className="item-number">
                                         <span className="counter" data-num="150000">
                                             {
-                                            studentCount ? studentCount : 0
+                                            studentCount ? studentCount : <p style={{color:'red'}}>error</p>
                                         }</span>
                                     </div>
                                 </div>
@@ -58,9 +58,9 @@ function teacherMainPage() {
                             </div>
                             <div className="col-6">
                                 <div className="item-content">
-                                    <div className="item-title">Teachers</div>
+                                    <div className="item-title">Teacher</div>
                                     <div className="item-number">
-                                        <span className="counter" data-num="2250">1</span>
+                                        <span className="counter" data-num="2250">{User.user.name}</span>
                                     </div>
                                 </div>
                             </div>
@@ -104,7 +104,7 @@ function teacherMainPage() {
                                     <div className="item-content">
                                         <div className="item-title">Category</div>
                                         <div className="item-number">
-                                            <span className="counter" data-num="193000">1</span>
+                                            <span className="counter" data-num="193000">{state}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -144,7 +144,7 @@ function teacherMainPage() {
                                         </Dropdown>
                             </div>
                            </div>
-                           <Student teacher={true} setstudentCount={setstudentCount} home={true} cat={state}></Student>
+                           <Student  setstudentCount={()=>setstudentCount} teacher={true}  home={true} cat={state}></Student>
                     </div>
                     
                 </div>

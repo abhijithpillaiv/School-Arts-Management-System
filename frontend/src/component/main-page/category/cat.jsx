@@ -20,19 +20,15 @@ function cat() {
     const [serchItem, setserchItem] = useState('')
     const [confirm, setconfirm] = useState({isOpen: false})
     const [progress, setprogress] = useState(false)
-    const [reloader, setreloader] = useState(true)
 
-    const onDelete = id => {
-        setconfirm({
-            ...confirm,
-            isOpen: false
-        });
-
+    const onDelete=(id,index)=>{
+        setconfirm({...confirm, isOpen:false});
         setprogress(true)
-        axios.get('/api/student/studentDelete/' + id).then((res) => {
-            setreloader(!reloader)
-        })
-
+            axios.get('/api/student/studentDelete/'+id).then((res)=>{
+                    data.splice(index,1)
+                    setprogress(false)
+                }) 
+        
     }
     useEffect(() => {
         if (cat === 'cat00') {
@@ -58,15 +54,16 @@ function cat() {
             setdata(res.data)
             setprogress(false)
         })
-    }, [cat,reloader])
+    }, [cat])
 
     const printHandler=()=>{
         window.print();
     }
-    const selectHandler =(id,select)=>{
+    const selectHandler =(id,obj,select)=>{
         setprogress(true)
         axios.get('/api/student/selectStudent/'+id+'/'+select).then((res)=>{
-            setreloader(!reloader)
+            obj.select = select
+            setprogress(false)
         }) 
     }
 
@@ -121,18 +118,6 @@ function cat() {
                                         <div className="item-title text-centre">
                                             <h3>{obj}</h3>
                                         </div>
-                                        <div className="dropdown">
-                                            <span className="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">...</span>
-
-                                            <div className="dropdown-menu dropdown-menu-right">
-                                                <Link className="dropdown-item" to=''>
-                                                    <i className="fas fa-times text-orange-red"></i>Close</Link>
-                                                <Link className="dropdown-item" to=''>
-                                                    <i className="fas fa-cogs text-dark-pastel-green"></i>Edit</Link>
-                                                <Link className="dropdown-item" to=''>
-                                                    <i className="fas fa-redo-alt text-orange-peel"></i>Refresh</Link>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div className="mg-b-20">
                                         <div className="row gutters-8">
@@ -172,7 +157,8 @@ function cat() {
                                                 </tr>
                                             </thead>
                                             <tbody>{
-                                                data.filter((obj)=>{
+                                                data.sort((obj,obj2)=>obj.select===obj2.select?obj.name.toLowerCase()>obj2.name.toLowerCase()?1:-1:obj.select==='true'?-1:1)
+                                                .filter((obj)=>{
                                                     if(serchName === ''){
                                                         serchList = obj
                                                     }
@@ -181,7 +167,7 @@ function cat() {
                                                     }
                                                     else{}
                                                     return serchList
-                                                }).map((obj2) => {
+                                                }).map((obj2,index) => {
                                                     return obj2.items.includes(obj) ? (
                                                         <tr key={obj2._id}>
                                                              <td> {obj2.select !=='undefined' ? obj2.select === 'true' ?<i className="fas fa-check-circle"></i>:null:null}</td>
@@ -229,7 +215,7 @@ function cat() {
                                                                                             isOpen: true,
                                                                                             title: "Confirm Delete",
                                                                                             subtitle: "Deleted student data can't be recovered",
-                                                                                            onConfirm: () => onDelete(obj2._id)
+                                                                                            onConfirm: () => onDelete(obj2._id,index)
                                                                                         })
                                                                                     }
                                                                                 }>
@@ -249,9 +235,9 @@ function cat() {
                                                                                 </span>
                                                                             </button>
                                                                             {obj2.select !=='undefined' ?obj2.select === 'true'?
-                                                          <button onClick={()=>selectHandler(obj2._id,false)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> DeSelect</i></button>:
-                                                          <button onClick={()=>selectHandler(obj2._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>:
-                                                          <button onClick={()=>selectHandler(obj2._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>}
+                                                          <button onClick={()=>selectHandler(obj2._id,obj2,"false")} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> DeSelect</i></button>:
+                                                          <button onClick={()=>selectHandler(obj2._id,obj2,"true")} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>:
+                                                          <button onClick={()=>selectHandler(obj2._id,obj2,"true")} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>}
                                                           
                                                                         </Dropdown.Menu>
 
