@@ -15,7 +15,6 @@ function cls() {
     let serchList = null;
     const [serchName, setserchName] = useState('')
     const [confirm, setconfirm] = useState({isOpen: false})
-    const [reloader, setreloader] = useState(true)
     const [progress, setprogress] = useState(false)
 
     const onDelete=(id,index)=>{
@@ -29,20 +28,22 @@ function cls() {
         
     }
     useEffect(() => {
+        setprogress(true)
         axios.get('/api/student/getStudents/class/' + clas).then((res) => {
             setdata(res.data)
-            // setprogress(false)
+            setprogress(false)
         })
-    }, [clas,reloader])
+    }, [clas])
 
     const printHandler=()=>{
         window.print();
     }
 
-    const selectHandler =(id,select)=>{
+    const selectHandler =(id,obj,select)=>{
         setprogress(true)
         axios.get('/api/student/selectStudent/'+id+'/'+select).then((res)=>{
-            setreloader(!reloader)
+            obj.select = select
+            setprogress(false)
         }) 
     }
 
@@ -213,9 +214,9 @@ function cls() {
                                                                 </span>
                                                             </button>
                                                             {obj.select !=='undefined' ?obj.select === 'true'?
-                                                          <button onClick={()=>selectHandler(obj._id,false)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> DeSelect</i></button>:
-                                                          <button onClick={()=>selectHandler(obj._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>:
-                                                          <button onClick={()=>selectHandler(obj._id,true)} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>}
+                                                          <button onClick={()=>selectHandler(obj._id,obj,"false")} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> DeSelect</i></button>:
+                                                          <button onClick={()=>selectHandler(obj._id,obj,"true")} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>:
+                                                          <button onClick={()=>selectHandler(obj._id,obj,"true")} className="dropdown-item"><i className="fas fa-check-circle text-blue-peel" style={{color:'blue'}}> Select</i></button>}
                                                           
                                                         </Dropdown.Menu>
 
