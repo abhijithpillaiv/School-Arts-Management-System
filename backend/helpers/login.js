@@ -8,8 +8,8 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let response = {}
             console.log("admin check");
-            if (data.email=='admin@vcs'){ 
-                    if (data.password == 'admin') {
+            if (data.email=='a'){ 
+                    if (data.password == 'a') {
                         console.log('login success')
                         let user={name:'Deepa Vinod',previlage:'admin',_id : '12123'}
                         response.user = user

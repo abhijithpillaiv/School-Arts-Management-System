@@ -115,7 +115,7 @@ function cls() {
                                     </tr>
                                 </thead>
                                 <tbody>{
-                                    data.sort((obj,obj2)=>obj.select===obj2.select?obj.name.toLowerCase()>obj2.name.toLowerCase()?1:-1:obj.select==='true'?-1:1)
+                                    data.sort((obj,obj2)=>obj.select===obj2.select?obj.section===obj2.section?obj.roll<=obj2.roll?1:-1:obj.section>obj2.section?1:-1:obj.select==='true'?-1:1)
                                     .filter((obj) => {
                                         if (serchName === '') {
                                             serchList = obj
